@@ -172,6 +172,8 @@ class L2CapCentralConnection: L2CapInternalConnection, CBPeripheralDelegate {
         channel.outputStream.delegate = self
         channel.inputStream.schedule(in: RunLoop.main, forMode: .default)
         channel.outputStream.schedule(in: RunLoop.main, forMode: .default)
+        channel.inputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
+        channel.outputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
         channel.inputStream.open()
         channel.outputStream.open()
         self.connectionHandler(self)
@@ -186,6 +188,8 @@ class L2CapPeripheralConnection: L2CapInternalConnection {
         channel.outputStream.delegate = self
         channel.inputStream.schedule(in: RunLoop.main, forMode: .default)
         channel.outputStream.schedule(in: RunLoop.main, forMode: .default)
+        channel.inputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
+        channel.outputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
         channel.inputStream.open()
         channel.outputStream.open()
     }
