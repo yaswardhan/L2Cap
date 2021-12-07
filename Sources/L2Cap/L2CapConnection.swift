@@ -46,6 +46,7 @@ class L2CapInternalConnection: NSObject, StreamDelegate, L2CapConnection {
     
     
     public func send(data: Data) -> Void {
+        print("sending ", data.hex)
         queueQueue.sync  {
             self.outputData.append(data)
         }
@@ -172,8 +173,8 @@ class L2CapCentralConnection: L2CapInternalConnection, CBPeripheralDelegate {
         channel.outputStream.delegate = self
         channel.inputStream.schedule(in: RunLoop.main, forMode: .default)
         channel.outputStream.schedule(in: RunLoop.main, forMode: .default)
-        channel.inputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
-        channel.outputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
+        channel.inputStream.setProperty(StreamSocketSecurityLevel.ssLv3.rawValue, forKey: .socketSecurityLevelKey)
+        channel.outputStream.setProperty(StreamSocketSecurityLevel.ssLv3.rawValue, forKey: .socketSecurityLevelKey)
         channel.inputStream.open()
         channel.outputStream.open()
         self.connectionHandler(self)
@@ -188,8 +189,10 @@ class L2CapPeripheralConnection: L2CapInternalConnection {
         channel.outputStream.delegate = self
         channel.inputStream.schedule(in: RunLoop.main, forMode: .default)
         channel.outputStream.schedule(in: RunLoop.main, forMode: .default)
-        channel.inputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
-        channel.outputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
+//        channel.inputStream.setProperty(kCFStreamSocketSecurityLevelTLSv1, forKey: .socketSecurityLevelKey)
+        print("StreamSocketSecurityLevel.none")
+//        channel.inputStream.setProperty(StreamSocketSecurityLevel.none.rawValue, forKey: .socketSecurityLevelKey)
+//        channel.outputStream.setProperty(StreamSocketSecurityLevel.none.rawValue, forKey: .socketSecurityLevelKey)
         channel.inputStream.open()
         channel.outputStream.open()
     }

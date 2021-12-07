@@ -16,12 +16,23 @@ extension UInt16 {
     }
 }
 
-extension Data {
+public extension Data {
     
     var uint16: UInt16 {
         get {
             let i16array = self.withUnsafeBytes { $0.load(as: UInt16.self) }
             return i16array
         }
+    }
+}
+
+public extension Data {
+    var hex: String {
+        var hexString = ""
+        for byte in self {
+            hexString += String(format: "%02X", byte)
+        }
+
+        return hexString
     }
 }
