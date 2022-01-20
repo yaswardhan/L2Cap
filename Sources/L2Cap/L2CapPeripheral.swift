@@ -66,7 +66,7 @@ public class L2CapPeripheral: NSObject {
             self.unpublishL2CAPChannel()
             return
         }
-        self.peripheralManager.publishL2CAPChannel(withEncryption: true)
+        self.peripheralManager.publishL2CAPChannel(withEncryption: false)
     }
     
     private func unpublishL2CAPChannel() {
