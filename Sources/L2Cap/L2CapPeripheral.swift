@@ -54,10 +54,9 @@ public class L2CapPeripheral: NSObject {
             return
         }
         self.service = CBMutableService(type: Constants.psmServiceID, primary: true)
-        self.characteristic = CBMutableCharacteristic(type: Constants.PSMID, properties: [ CBCharacteristicProperties.read, CBCharacteristicProperties.indicate], value: nil, permissions: [CBAttributePermissions.readable] )
+        self.characteristic = CBMutableCharacteristic(type: Constants.PSMID, properties: [ CBCharacteristicProperties.read, CBCharacteristicProperties.indicate, .writeWithoutResponse], value: nil, permissions: [CBAttributePermissions.readable] )
         self.service?.characteristics = [self.characteristic!]
         self.peripheralManager.add(self.service!)
-       
         self.peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [Constants.psmServiceID]])
         self.publishChannel = true
     }
@@ -92,13 +91,16 @@ public class L2CapPeripheral: NSObject {
 extension L2CapPeripheral: CBPeripheralManagerDelegate {
     
     public func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        
         if peripheral.state == .poweredOn {
             self.publishService()
         }
     }
     
     public func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
+        print("central.identifier", central.identifier)
         var centrals = self.subscribedCentrals[characteristic, default: [CBCentral]()]
+        peripheral.setDesiredConnectionLatency(.low, for: central)
         centrals.append(central)
         self.subscribedCentrals[characteristic]  = centrals
     }

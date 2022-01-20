@@ -46,7 +46,6 @@ class L2CapInternalConnection: NSObject, StreamDelegate, L2CapConnection {
     
     
     public func send(data: Data) -> Void {
-        print("sending ", data.hex)
         queueQueue.sync  {
             self.outputData.append(data)
         }
@@ -83,7 +82,7 @@ class L2CapInternalConnection: NSObject, StreamDelegate, L2CapConnection {
     }
     
     private func readBytes(from stream: InputStream) {
-        let bufLength = 1024
+        let bufLength = 20480
         let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufLength)
         defer {
             buffer.deallocate()
@@ -173,8 +172,8 @@ class L2CapCentralConnection: L2CapInternalConnection, CBPeripheralDelegate {
         channel.outputStream.delegate = self
         channel.inputStream.schedule(in: RunLoop.main, forMode: .default)
         channel.outputStream.schedule(in: RunLoop.main, forMode: .default)
-        channel.inputStream.setProperty(StreamSocketSecurityLevel.ssLv3.rawValue, forKey: .socketSecurityLevelKey)
-        channel.outputStream.setProperty(StreamSocketSecurityLevel.ssLv3.rawValue, forKey: .socketSecurityLevelKey)
+//        channel.inputStream.setProperty(StreamSocketSecurityLevel.ssLv3.rawValue, forKey: .socketSecurityLevelKey)
+//        channel.outputStream.setProperty(StreamSocketSecurityLevel.ssLv3.rawValue, forKey: .socketSecurityLevelKey)
         channel.inputStream.open()
         channel.outputStream.open()
         self.connectionHandler(self)

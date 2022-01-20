@@ -37,7 +37,8 @@ public class L2CapCentral: NSObject {
             return
         }
         if self.scan {
-            self.central.scanForPeripherals(withServices: [Constants.psmServiceID], options: nil)
+            
+            self.central.scanForPeripherals(withServices: [Constants.psmServiceID], options: [CBCentralManagerScanOptionAllowDuplicatesKey : false])
         } else {
             self.central.stopScan()
         }
@@ -59,6 +60,7 @@ extension L2CapCentral: CBCentralManagerDelegate {
     }
     
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        print("##", advertisementData, peripheral.name, peripheral.identifier,"##\n")
         guard !self.discoveredPeripherals.contains(peripheral.identifier) else {
             return
         }
